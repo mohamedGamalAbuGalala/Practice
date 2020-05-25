@@ -42,41 +42,32 @@ typedef vector<vi> vvi;
 typedef vector<ii> vii;
 typedef pair<lli, string> lls;
 
-int board[8][8], row[8];
-int ans = 0, t;
-int rw, ld, rd;
 #define isOn(S, j) (S & (1 << j))
 #define setBit(S, j) (S |= (1 << j))
 #define clearBit(S, j) (S &= ~(1 << j))
 
-void bT(int c) {
-	if (c == 8) {
-		int sm = 0;
-		for (int i = 0; i < 8; ++i)
-			sm += board[i][row[i]];
-		ans = max(sm, ans);
-		return;
-	}
-	for (int r = 0; r < 8; r++)
-		if (!isOn(rw, r) and !isOn(ld, (r - c + 7)) and !isOn(rd, (r + c))) {
-			setBit(rw,r), setBit(ld, (r - c + 7)), setBit(rd, (r + c));
-			row[c] = r;
-			bT(c + 1);
-			clearBit(rw, r), clearBit(ld, (r - c + 7)), clearBit(rd, (r + c));
-		}
-}
-
 int main() {
 	file();
-	int T;
-	in(T);
-	while (T--) {
-		ans = 0;
-		for (int i = 0; i < 8; ++i)
-			for (int j = 0; j < 8; ++j)
-				in(board[i][j]);
-		bT(0);
-		printf("%5d\n", ans);
+	int n, f[21] { 0 }, c[21] { 0 }, m, v, t;
+	in(n);
+	for (int o = 0; o < n and in(f[o]) and in(c[o]); ++o)
+		;
+	in(m);
+	for (int k = 1; k <= m and in(v) and in(t); ++k) {
+		int ans = OO;
+		printf("Case %d: ", k);
+		for (int i = 1; i < (1 << n); ++i) {
+			int sm = 0, vv = v;
+			for (int j = 0; j < n; ++j)
+				if (isOn(i, j))
+					sm += c[j], vv -= (f[j] * t);
+			if (vv <= 0 and sm < ans)
+				ans = sm;
+		}
+		if (ans == OO)
+			puts("IMPOSSIBLE");
+		else
+			ot(ans), ln();
 	}
 	return 0;
 }

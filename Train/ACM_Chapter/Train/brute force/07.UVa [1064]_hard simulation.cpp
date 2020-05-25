@@ -13,7 +13,7 @@ using namespace std;
 #define otc(x) printf("%c", x)
 #define ln() printf("\n")
 #define otl(x) printf("%lld", x)
-#define otf(x) printf("%.14lf", x)
+#define otf(x) printf("%.2lf", x)
 // helpers defines
 #define all(v) v.begin(), v.end()
 #define sz(v) ((int)((v).size()))
@@ -42,41 +42,49 @@ typedef vector<vi> vvi;
 typedef vector<ii> vii;
 typedef pair<lli, string> lls;
 
-int board[8][8], row[8];
-int ans = 0, t;
-int rw, ld, rd;
-#define isOn(S, j) (S & (1 << j))
-#define setBit(S, j) (S |= (1 << j))
-#define clearBit(S, j) (S &= ~(1 << j))
-
-void bT(int c) {
-	if (c == 8) {
-		int sm = 0;
-		for (int i = 0; i < 8; ++i)
-			sm += board[i][row[i]];
-		ans = max(sm, ans);
-		return;
-	}
-	for (int r = 0; r < 8; r++)
-		if (!isOn(rw, r) and !isOn(ld, (r - c + 7)) and !isOn(rd, (r + c))) {
-			setBit(rw,r), setBit(ld, (r - c + 7)), setBit(rd, (r + c));
-			row[c] = r;
-			bT(c + 1);
-			clearBit(rw, r), clearBit(ld, (r - c + 7)), clearBit(rd, (r + c));
-		}
+class Packet {
+public:
+	int ss, ee, id;
+};
+Packet nP(int x, int y, int z) {
+	Packet p;
+	p.id = x, p.ss = y, p.ee = z;
+	return p;
 }
 
 int main() {
-	file();
-	int T;
-	in(T);
-	while (T--) {
-		ans = 0;
-		for (int i = 0; i < 8; ++i)
-			for (int j = 0; j < 8; ++j)
-				in(board[i][j]);
-		bT(0);
-		printf("%5d\n", ans);
+	file(); //TODO
+	int n, m, ttt = 0;
+	while (in(n) and in(m) and n and m) {
+		int id, ss, ee, order[7] { 0, 1, 2, 3, 4, 5, 6 }, ndB = OO, s[7] { 0 };
+		Packet seq[1002];
+		for (int i = 1; i <= n and in(s[i]); ++i)
+			;
+		for (int i = 0; i < m and in(id) and in(ss) and in(ee); ++i)
+			seq[i] = nP(id, ss, ee);
+		do {
+			int mxB = 0, cs = 0, cM = order[1], cB = 1, mIdx = 1;
+			vi bytes[7];
+			for (int i = 0; i < 7; ++i)
+				for (int j = 0; j < s[i] + 4; ++j)
+					bytes[i].pb(0);
+			for (int i = 0; i < m; ++i) {
+				Packet p = seq[i];
+				for (int i = p.ss; i <= p.ee; ++i)
+					bytes[p.id][i] = 1;
+				cs += p.ee - p.ss + 1;
+				while (mIdx <= n) {
+					while (cB <= s[cM] and bytes[cM][cB])
+						cB++, cs--;
+					if (cB <= s[cM] or mIdx == n)
+						break;
+					cB = 1, cM = order[++mIdx];
+				}
+				mxB = max(mxB, cs);
+			}
+			ndB = min(ndB, mxB);
+		} while (next_permutation(order + 1, order + n + 1));
+		printf("Case %d: %d\n\n", ++ttt, ndB);
 	}
 	return 0;
 }

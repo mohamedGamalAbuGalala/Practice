@@ -42,41 +42,45 @@ typedef vector<vi> vvi;
 typedef vector<ii> vii;
 typedef pair<lli, string> lls;
 
-int board[8][8], row[8];
-int ans = 0, t;
-int rw, ld, rd;
-#define isOn(S, j) (S & (1 << j))
-#define setBit(S, j) (S |= (1 << j))
-#define clearBit(S, j) (S &= ~(1 << j))
+string sa[11], sb[11], a, b;
+int n, mn;
+map<string, bool> vs;
 
-void bT(int c) {
-	if (c == 8) {
-		int sm = 0;
-		for (int i = 0; i < 8; ++i)
-			sm += board[i][row[i]];
-		ans = max(sm, ans);
+string replace_all(string text, string from, string to, string result = "",
+		int i = 0) {
+	while (i < sz(text))
+		if (i + sz(from) <= sz(text) and text.substr(i, sz(from)) == from)
+			result += to, i += sz(from);
+		else
+			result.pb(text[i++]);
+	return result;
+}
+
+void slv(string cur, int sm = 0) {
+	if (sz(cur) > 10)
+		return;
+	if (cur == b) {
+		mn = min(mn, sm);
 		return;
 	}
-	for (int r = 0; r < 8; r++)
-		if (!isOn(rw, r) and !isOn(ld, (r - c + 7)) and !isOn(rd, (r + c))) {
-			setBit(rw,r), setBit(ld, (r - c + 7)), setBit(rd, (r + c));
-			row[c] = r;
-			bT(c + 1);
-			clearBit(rw, r), clearBit(ld, (r - c + 7)), clearBit(rd, (r + c));
-		}
+	for (int i = 0; i < n; ++i) {
+		string tcur = replace_all(cur, sa[i], sb[i]);
+		if (!vs[tcur])
+			vs[tcur] = 1, slv(tcur, sm + 1);
+	}
 }
 
 int main() {
-	file();
-	int T;
-	in(T);
-	while (T--) {
-		ans = 0;
-		for (int i = 0; i < 8; ++i)
-			for (int j = 0; j < 8; ++j)
-				in(board[i][j]);
-		bT(0);
-		printf("%5d\n", ans);
+	file(); //TODO
+	while (in(n) and n) {
+		mn = OO, vs.clear();
+		for (int i = 0; i < n and cin >> sa[i] >> sb[i]; ++i)
+			;
+		cin >> a >> b, vs[a] = 1, slv(a);
+		if (mn != OO)
+			printf("%d\n", mn);
+		else
+			printf("-1\n");
 	}
 	return 0;
 }

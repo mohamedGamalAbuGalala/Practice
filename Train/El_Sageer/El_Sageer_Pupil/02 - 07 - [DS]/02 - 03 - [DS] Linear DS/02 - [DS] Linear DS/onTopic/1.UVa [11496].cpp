@@ -1,18 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
 // input handle
-#define in(n) scanf("%d",&n)
-#define ins(n) scanf("%s",n)
-#define inc(n) scanf("%c",&n)
-#define inf(n) scanf("%lf",&n)
-#define inl(n) scanf("%lld",&n)
-#define ot(x) printf("%d", x)
 #define sp() printf(" ")
-#define ots(x) printf("%s ", x)
-#define otc(x) printf("%c", x)
 #define ln() printf("\n")
-#define otl(x) printf("%lld ", x)
+#define in(n) scanf("%d",&n)
+#define ot(x) printf("%d", x)
+#define ins(n) scanf("%s",n)
+#define ots(x) printf("%s ", x)
+#define inc(n) scanf("%c",&n)
+#define otc(x) printf("%c", x)
+#define inf(n) scanf("%lf",&n)
 #define otf(x) printf("%.2lf ", x)
+#define inl(n) scanf("%lld",&n)
+#define otl(x) printf("%lld ", x)
 // helpers defines
 #define all(v) v.begin(), v.end()
 #define sz(v) ((int)((v).size()))
